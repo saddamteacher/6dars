@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-dars: Lug&#x27;at (Dict) va To&#x27;plam (Set) | Saddam Teacher</title>
+<style>
+  :root {
+    --bg: #0b0f17;
+    --card: #131927;
+    --card2: #1a2233;
+    --ink: #e7ecf5;
+    --muted: #8b96ab;
+    --accent: #818cf8;
+    --accent-strong: #6366f1;
+    --accent-soft: rgba(99,102,241,.14);
+    --border: #232c40;
+    --code-bg: #0d1117;
+    --code-ink: #e6edf3;
+    --ok: #4ade80;
+    --bad: #f87171;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, "Inter", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6;
+  }
+  ::selection { background: var(--accent-strong); color: #fff; }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11,15,23,.8); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-in { max-width: 880px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px; flex-shrink: 0;
+    box-shadow: 0 0 18px rgba(99,102,241,.45);
+  }
+  .brand b { font-size: 15px; display: block; line-height: 1.2; }
+  .brand span { font-size: 12px; color: var(--muted); }
+  .header-in .spacer { flex: 1; }
+  .tg-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #229ED9; color: #fff; text-decoration: none;
+    padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; transition: .2s;
+  }
+  .tg-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(34,158,217,.5); }
+  .hero { max-width: 880px; margin: 0 auto; padding: 48px 20px 28px; position: relative; }
+  .hero::before {
+    content: ""; position: absolute; top: -80px; left: 10%; width: 420px; height: 280px;
+    background: radial-gradient(ellipse, rgba(99,102,241,.18), transparent 70%);
+    pointer-events: none;
+  }
+  .hero .tag {
+    display: inline-block; background: var(--accent-soft); color: var(--accent);
+    font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;
+    letter-spacing: .5px; text-transform: uppercase; border: 1px solid rgba(129,140,248,.25);
+  }
+  .hero h1 { font-size: clamp(26px, 4.5vw, 38px); margin: 12px 0 8px; letter-spacing: -.5px; }
+  .hero p { color: var(--muted); max-width: 620px; }
+  .hero .chips { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { font-size: 12.5px; background: var(--card); border: 1px solid var(--border); padding: 5px 12px; border-radius: 999px; color: var(--muted); }
+  .pills { max-width: 880px; margin: 0 auto; padding: 0 20px 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    text-decoration: none; font-size: 13.5px; font-weight: 600; color: var(--ink);
+    background: var(--card); border: 1px solid var(--border); padding: 8px 16px; border-radius: 999px; transition: .15s;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  main { max-width: 880px; margin: 0 auto; padding: 20px 20px 80px; }
+  section { margin-top: 36px; }
+  .sec-title { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .sec-title .ico {
+    width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 17px;
+    border: 1px solid rgba(129,140,248,.2);
+  }
+  .sec-title h2 { font-size: 21px; letter-spacing: -.3px; }
+  .sec-sub { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+  .cell { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+  .cell .note { padding: 16px 18px 6px; }
+  .cell .note h3 { font-size: 15.5px; margin-bottom: 4px; }
+  .cell .note h3 .num { color: var(--accent); font-weight: 800; margin-right: 4px; }
+  .cell .note p { font-size: 14px; color: var(--muted); }
+  .cell .note code, .qtext code, .sec-sub code, .hw-item code {
+    background: var(--accent-soft); color: var(--accent);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "Cascadia Code", Consolas, monospace;
+  }
+  .editor-wrap { margin: 10px 14px 14px; border-radius: 10px; overflow: hidden; background: var(--code-bg); border: 1px solid #1d2530; }
+  .editor-bar { display: flex; align-items: center; padding: 7px 12px; gap: 6px; border-bottom: 1px solid #21262d; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot:nth-child(1) { background: #ff5f57; } .dot:nth-child(2) { background: #febc2e; } .dot:nth-child(3) { background: #28c840; }
+  .editor-bar .lang { margin-left: auto; font-size: 11px; color: #8b949e; font-family: monospace; }
+  textarea.code {
+    width: 100%; background: var(--code-bg); color: var(--code-ink);
+    border: none; outline: none; resize: none;
+    font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+    font-size: 13.5px; line-height: 1.55; padding: 14px 16px; display: block; tab-size: 4;
+  }
+  .cell-actions { display: flex; align-items: center; gap: 10px; padding: 0 12px 12px; background: var(--code-bg); flex-wrap: wrap; }
+  .run-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--accent-strong); color: #fff; border: none; cursor: pointer;
+    font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 8px; transition: .15s; font-family: inherit;
+  }
+  .run-btn:hover { background: #4f46e5; box-shadow: 0 0 14px rgba(99,102,241,.4); }
+  .run-btn:disabled { opacity: .5; cursor: wait; }
+  .reset-btn { background: transparent; color: #8b949e; border: 1px solid #30363d; font-size: 12.5px; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-family: inherit; }
+  .reset-btn:hover { color: #e6edf3; }
+  .output {
+    background: #010409; color: #7ee787; font-family: Consolas, monospace;
+    font-size: 13px; padding: 12px 16px; white-space: pre-wrap;
+    border-top: 1px solid #21262d; display: none; max-height: 260px; overflow: auto;
+  }
+  .output.err { color: #ff7b72; }
+  .hw-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 0; counter-reset: hw; }
+  .hw-item { display: flex; gap: 14px; padding: 13px 20px; border-bottom: 1px solid #1b2335; font-size: 14.5px; }
+  .hw-item:last-child { border-bottom: none; }
+  .hw-item::before {
+    counter-increment: hw; content: counter(hw);
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .hw-item.project { background: linear-gradient(90deg, rgba(245,158,11,.12), transparent); }
+  .hw-item.project::before { background: #f59e0b; color: #0b0f17; content: "★"; }
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; }
+  .qtext { font-weight: 600; font-size: 15px; margin-bottom: 12px; }
+  .qtext .qnum { color: var(--accent); margin-right: 6px; }
+  .opts { display: grid; gap: 8px; }
+  .opt {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px;
+    font-size: 14px; transition: .15s; background: var(--card2);
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt input { accent-color: var(--accent-strong); }
+  .opt.correct { border-color: var(--ok); background: rgba(74,222,128,.1); }
+  .opt.wrong { border-color: var(--bad); background: rgba(248,113,113,.1); }
+  .check-btn {
+    width: 100%; background: var(--accent-strong); color: #fff; border: none;
+    font-size: 15px; font-weight: 800; padding: 14px; border-radius: 12px;
+    cursor: pointer; font-family: inherit; transition: .15s;
+  }
+  .check-btn:hover { background: #4f46e5; box-shadow: 0 0 20px rgba(99,102,241,.35); }
+  .score { display: none; text-align: center; font-size: 17px; font-weight: 800; padding: 18px; border-radius: 12px; margin-top: 14px; border: 1px solid var(--border); }
+  .dl-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .dl-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1.5px solid var(--border); color: var(--ink);
+    text-decoration: none; font-size: 13.5px; font-weight: 600;
+    padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: .15s; font-family: inherit;
+  }
+  .dl-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .lesson-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 44px; }
+  .lesson-nav a {
+    text-decoration: none; color: var(--ink); background: var(--card);
+    border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; transition: .15s;
+  }
+  .lesson-nav a:hover { border-color: var(--accent); color: var(--accent); }
+  footer { border-top: 1px solid var(--border); background: var(--card); padding: 28px 20px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  footer a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .loader-hint { font-size: 12px; color: #8b949e; }
+  @media (max-width: 560px) { .hero h1 { font-size: 24px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <div class="logo">ST</div>
+    <div class="brand"><b>Saddam Teacher</b><span>Data Analyst kursi</span></div>
+    <div class="spacer"></div>
+    <a class="tg-btn" href="https://t.me/saddamtg" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+      Yordam kerakmi?
+    </a>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="tag">1-oy · Python asoslari</span>
+  <h1>6-dars: Lug&#x27;at (Dict) va To&#x27;plam (Set)</h1>
+  <p>Kalit-qiymat juftliklari, SANASH va GURUHLASH usullari — 2-oydagi pandasning poydevori. Eng muhim dars!</p>
+  <div class="chips">
+    <span class="chip">⏱ 3 soat</span>
+    <span class="chip">💻 15 ta misol</span>
+    <span class="chip">📝 15 ta uy ishi</span>
+    <span class="chip">✅ 10 savollik test</span>
+  </div>
+</div>
+
+<div class="pills">
+  <a class="pill" href="#dars">📖 Dars</a>
+  <a class="pill" href="#uyishi">🏠 Uy ishi</a>
+  <a class="pill" href="#test">🧪 Test</a>
+</div>
+
+<main>
+
+<section id="dars">
+  <div class="sec-title"><div class="ico">📖</div><h2>Dars: misollar bilan</h2></div>
+  <p class="sec-sub">«Ishga tushirish» bosing — kod brauzerning o'zida ishlaydi (birinchi marta 5-10 soniya yuklanadi). Kodni o'zgartirib tajriba qiling! <code>input()</code> so'ralsa, oynacha chiqadi.</p>
+  
+  <div id="cells"></div>
+</section>
+
+<section id="uyishi">
+  <div class="sec-title"><div class="ico">🏠</div><h2>Uy ishi — 15 ta topshiriq</h2></div>
+  <p class="sec-sub">Har birini alohida bajarib, keyingi darsga olib keling. ★ — mini-loyiha!</p>
+  <div class="hw-card" id="hw"></div>
+  <div class="dl-row">
+    <button class="dl-btn" onclick="downloadHW()">⬇ Uy ishini yuklab olish (.txt)</button>
+  </div>
+</section>
+
+<section id="test">
+  <div class="sec-title"><div class="ico">🧪</div><h2>Mini-test — o'zingizni sinang</h2></div>
+  <p class="sec-sub">10 ta savol. Belgilab bo'lgach, «Tekshirish» tugmasini bosing.</p>
+  <div id="quiz"></div>
+  <button class="check-btn" onclick="grade()">Tekshirish ✓</button>
+  <div class="score" id="score"></div>
+</section>
+
+<div class="lesson-nav" id="lesson-nav"></div>
+
+</main>
+
+<footer>
+  © 2026 <b>Saddam Teacher</b> · Data Analyst kursi · Savollar bo'lsa: <a href="https://t.me/saddamtg" target="_blank">t.me/saddamtg</a>
+</footer>
+
+<script>
+const DATA = {"cells": [{"t": "Dict yaratish", "n": "Figurali qavs <code>{}<\/code>, ichida <code>kalit: qiymat<\/code>.", "c": "narxlar = {\"Non\": 4000, \"Sut\": 14000, \"Olma\": 15000}\nprint(narxlar)"}, {"t": "Qiymatni olish — kalit orqali", "n": "Indeks emas, NOM orqali olamiz!", "c": "print(narxlar[\"Sut\"])    # 14000"}, {"t": "get() — xavfsiz olish", "n": "Yo&#x27;q kalitni <code>[]<\/code> bilan so&#x27;rasak — XATO. <code>get()<\/code> bilan so&#x27;rasak — xato yo&#x27;q!", "c": "print(narxlar.get(\"Kola\"))      # None - xato bermadi\nprint(narxlar.get(\"Kola\", 0))   # 0 - \"topilmasa 0 deb ol\" "}, {"t": "Qo'shish va o'zgartirish", "n": "", "c": "narxlar[\"Kola\"] = 14000    # yangi qo'shildi\nnarxlar[\"Non\"] = 4500      # narx yangilandi\nprint(narxlar)"}, {"t": "O'chirish — del", "n": "", "c": "del narxlar[\"Olma\"]\nprint(narxlar)"}, {"t": "in — kalit bormi?", "n": "", "c": "print(\"Sut\" in narxlar)    # True\nprint(\"Olma\" in narxlar)   # False - o'chirgan edik"}, {"t": "Dict ustida sikl — items()", "n": "Kalit va qiymatni birga olamiz.", "c": "for mahsulot, narx in narxlar.items():\n    print(f\"{mahsulot}: {narx} so'm\")"}, {"t": "values() bilan yig'indi", "n": "Hamma narxlarning jami:", "c": "print(sum(narxlar.values()))"}, {"t": "MUHIM: sanash usuli — sekin tushunamiz!", "n": "Vazifa: ro&#x27;yxatda har to&#x27;lov turi NECHA MARTA kelganini sanash.<br>Mantiq: yangi to&#x27;lov ko&#x27;rsak — 0 dan boshlaymiz, ko&#x27;rganimizga +1.", "c": "tolovlar = [\"Naqd\", \"Click\", \"Naqd\", \"Payme\", \"Naqd\", \"Click\"]\nsanoq = {}\nfor t in tolovlar:\n    sanoq[t] = sanoq.get(t, 0) + 1\nprint(sanoq)\n# {'Naqd': 3, 'Click': 2, 'Payme': 1}"}, {"t": "Xuddi shu usul — pul bilan (guruhlash)", "n": "Endi 1 emas, SUMMANI qo&#x27;shib boramiz. Filial bo&#x27;yicha jami savdo:", "c": "cheklar = [\n    [\"Chilonzor\", 125000],\n    [\"Yunusobod\", 89000],\n    [\"Chilonzor\", 230000],\n    [\"Yunusobod\", 310000],\n    [\"Chilonzor\", 95000],\n]\nsavdo = {}\nfor filial, summa in cheklar:\n    savdo[filial] = savdo.get(filial, 0) + summa\nprint(savdo)\n# Chilonzor: 450000, Yunusobod: 399000"}, {"t": "Eng kattasini topish", "n": "", "c": "eng_zor = max(savdo, key=savdo.get)\nprint(f\"Eng zo'r filial: {eng_zor}\")"}, {"t": "Set — takrorlanmaslar to'plami", "n": "List ichida takror ko&#x27;p bo&#x27;lsa, set ularni O&#x27;ZI o&#x27;chiradi!", "c": "mijozlar = [\"Aziz\", \"Madina\", \"Aziz\", \"Sardor\", \"Madina\", \"Aziz\"]\ntakrorsiz = set(mijozlar)\nprint(takrorsiz)\nprint(f\"Unikal mijozlar: {len(takrorsiz)} ta\")"}, {"t": "Ikkita to'plamni solishtirish", "n": "<code>&amp;<\/code> — ikkalasida ham bor. <code>-<\/code> — birinchisida bor, ikkinchisida yo&#x27;q.", "c": "yanvar = {\"Aziz\", \"Madina\", \"Sardor\", \"Nilufar\"}\nfevral = {\"Madina\", \"Sardor\", \"Jasur\"}\n\nprint(\"Doimiylar:\", yanvar & fevral)\nprint(\"Ketganlar:\", yanvar - fevral)\nprint(\"Yangilar:\", fevral - yanvar)"}, {"t": "SINF ISHI: mini telefon kitobchasi", "n": "", "c": "kitobcha = {}\nkitobcha[\"Aziz\"] = \"+998901234567\"\nkitobcha[\"Madina\"] = \"+998935554433\"\n\nism = input(\"Kimni qidiramiz? \")\nraqam = kitobcha.get(ism)\nif raqam:\n    print(f\"{ism}: {raqam}\")\nelse:\n    print(\"Topilmadi!\")"}, {"t": "QO'SHIMCHA (kuchlilar uchun): list ichida dict", "n": "Bu — haqiqiy JADVAL ko&#x27;rinishi. 2-oyda pandas shunga qurilgan!", "c": "mijozlar = [\n    {\"ism\": \"Aziz\", \"shahar\": \"Toshkent\", \"xarid\": 1250000},\n    {\"ism\": \"Madina\", \"shahar\": \"Samarqand\", \"xarid\": 2840000},\n]\nfor m in mijozlar:\n    print(m[\"ism\"], \"-\", m[\"xarid\"], \"so'm\")"}], "hw": ["4 ta mahsulot va narxidan dict tuzing, print qiling.", "Bitta mahsulot narxini kalit orqali chiqaring: print(narxlar[\"Non\"])", "get() bilan dictda YO'Q mahsulotni so'rang - xato bermasligini ko'ring. get(\"Kola\", 0) bilan ham.", "Dictga yangi mahsulot qo'shing, bittasining narxini o'zgartiring, bittasini del bilan o'chiring.", "\"Sut\" dictda bormi? in bilan tekshiring.", "items() bilan sikl: har mahsulotni \"Non - 4000 so'm\" ko'rinishida chiqaring.", "values() bilan hamma narxlar yig'indisini toping.", "SANASH usuli: quyidagi listda har bir to'lov turi necha marta kelganini dict bilan sanang: tolovlar = [\"Naqd\", \"Click\", \"Naqd\", \"Payme\", \"Naqd\"] (sanoq[t] = sanoq.get(t, 0) + 1)", "SANASH usuli 2: matn = \"olma anor olma uzum olma\" split() qilib har so'zni sanang. Natija: {'olma': 3, 'anor': 1, 'uzum': 1}", "GURUHLASH: cheklar = [[\"Chilonzor\", 125000], [\"Yunusobod\", 89000], [\"Chilonzor\", 230000]] Har filial jami savdosini dict bilan toping.", "10-topshiriqdan eng zo'r filialni toping: max(savdo, key=savdo.get)", "mijozlar = [\"Aziz\", \"Madina\", \"Aziz\", \"Sardor\", \"Madina\"] set() bilan takrorlarni o'chirib, nechta UNIKAL mijoz borligini toping.", "yanvar = {\"Aziz\", \"Madina\", \"Sardor\"} fevral = {\"Madina\", \"Jasur\"} a) ikkala oyda kelganlar (&) b) yanvarda bor, fevralda yo'qlar (-)", "Telefon kitobcha: 3 ta ism-raqam dict yarating. input bilan ism so'rab, get() bilan raqamni toping (topilmasa \"Yo'q\" deng).", "MINI-LOYIHA: \"Do'kon kassasi\" narxlar = {\"non\": 4000, \"sut\": 14000, \"olma\": 15000} input bilan mahsulot nomi va sonini so'rang. Mahsulot dictda bo'lsa: jami summani chiqaring. Bo'lmasa: \"Bunday mahsulot yo'q!\" deng."], "quiz": [{"q": "d = {\"Non\": 4000} - 4000 ni qanday olamiz?", "o": ["d[0]", "d[\"Non\"]", "d.Non", "d(Non)"], "a": 1}, {"q": "d[\"yoq_kalit\"] va d.get(\"yoq_kalit\") farqi?", "o": ["farqi yo'q", "birinchisi xato (KeyError), ikkinchisi None qaytaradi", "ikkalasi ham xato", "ikkalasi ham None"], "a": 1}, {"q": "d.get(\"Kola\", 0) - \"Kola\" yo'q bo'lsa nima qaytadi?", "o": ["None", "xato", "0", "\"Kola\""], "a": 2}, {"q": "\"Sut\" in narxlar - nimani tekshiradi?", "o": ["qiymatni", "kalitni", "ikkalasini", "uzunlikni"], "a": 1}, {"q": "d[k] = d.get(k, 0) + 1 namunasi nima uchun?", "o": ["saralash", "sanash (counting)", "o'chirish", "nusxalash"], "a": 1}, {"q": "sum(d.values()) nima qiladi?", "o": ["kalitlarni qo'shadi", "qiymatlar yig'indisi", "sonini sanaydi", "xato"], "a": 1}, {"q": "set([1,2,2,3,3,3]) da nechta element bo'ladi?", "o": ["6", "3", "2", "1"], "a": 1}, {"q": "yanvar - fevral (set ayirma) nima beradi?", "o": ["ikkalasida ham borlar", "yanvarda bor, fevralda yo'qlar (ketganlar)", "hammasi", "faqat fevraldagilar"], "a": 1}, {"q": "yanvar & fevral nima beradi?", "o": ["farq", "kesishma (ikkalasida ham borlar)", "birlashma", "xato"], "a": 1}, {"q": "List ichida dict [{\"ism\": \"Aziz\", ...}, ...] nimaga o'xshaydi?", "o": ["rasmga", "jadvalga (DataFrame manbai)", "funksiyaga", "siklga ============================================================"], "a": 1}], "lesson_no": "6", "title": "6-dars: Lug'at (Dict) va To'plam (Set)"};
+const CELLS = DATA.cells, HW = DATA.hw, QUIZ = DATA.quiz;
+
+/* ===== render cells ===== */
+const cellsEl = document.getElementById("cells");
+CELLS.forEach((cell, i) => {
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.innerHTML = `
+    <div class="note">
+      <h3><span class="num">${i+1}.</span> ${cell.t}</h3>
+      <p>${cell.n}</p>
+    </div>
+    <div class="editor-wrap">
+      <div class="editor-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="lang">python</span></div>
+      <textarea class="code" id="code-${i}" spellcheck="false"></textarea>
+      <div class="cell-actions">
+        <button class="run-btn" onclick="runCell(${i})" id="btn-${i}">▶ Ishga tushirish</button>
+        <button class="reset-btn" onclick="resetCell(${i})">↺ Qaytarish</button>
+        <span class="loader-hint" id="hint-${i}"></span>
+      </div>
+      <pre class="output" id="out-${i}"></pre>
+    </div>`;
+  cellsEl.appendChild(div);
+  div.querySelector(`#code-${i}`).value = cell.c;
+});
+document.querySelectorAll("textarea.code").forEach(t => {
+  const fit = () => { t.style.height = "auto"; t.style.height = (t.scrollHeight + 2) + "px"; };
+  t.addEventListener("input", fit); fit();
+});
+
+/* ===== render hw ===== */
+const hwEl = document.getElementById("hw");
+HW.forEach((item, i) => {
+  const d = document.createElement("div");
+  d.className = "hw-item" + (i === HW.length - 1 ? " project" : "");
+  const safe = item.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  d.innerHTML = `<div>${safe}</div>`;
+  hwEl.appendChild(d);
+});
+
+/* ===== render quiz ===== */
+const quizEl = document.getElementById("quiz");
+QUIZ.forEach((q, qi) => {
+  const card = document.createElement("div");
+  card.className = "q-card";
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  card.innerHTML = `<div class="qtext"><span class="qnum">${qi+1}.</span> ${esc(q.q)}</div>
+    <div class="opts">${q.o.map((opt, oi) => `
+      <label class="opt" id="opt-${qi}-${oi}">
+        <input type="radio" name="q${qi}" value="${oi}">
+        <span><b>${"abcd"[oi]})</b> ${esc(opt)}</span>
+      </label>`).join("")}</div>`;
+  quizEl.appendChild(card);
+});
+
+/* ===== lesson nav ===== */
+const n = parseInt(DATA.lesson_no);
+const nav = document.getElementById("lesson-nav");
+let navHtml = "";
+if (n > 1) navHtml += `<a href="https://saddamteacher.github.io/${n-1}dars/">← ${n-1}-dars</a>`;
+else navHtml += `<span></span>`;
+if (n < 7) navHtml += `<a href="https://saddamteacher.github.io/${n+1}dars/">${n+1}-dars →</a>`;
+nav.innerHTML = navHtml;
+
+/* ===== pyodide ===== */
+let pyodide = null, pyLoading = null;
+async function getPy(hintEl) {
+  if (pyodide) return pyodide;
+  if (!pyLoading) {
+    hintEl.textContent = "Python yuklanmoqda... (5-10 soniya)";
+    pyLoading = (async () => {
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js";
+      document.head.appendChild(s);
+      await new Promise(r => s.onload = r);
+      const py = await loadPyodide();
+      py.globals.set("js_prompt", (msg) => {
+        const v = window.prompt(msg || "Qiymat kiriting:");
+        return v === null ? "" : v;
+      });
+      await py.runPythonAsync("import builtins\nbuiltins.input = lambda prompt='': js_prompt(str(prompt))");
+      return py;
+    })();
+  }
+  pyodide = await pyLoading;
+  hintEl.textContent = "";
+  return pyodide;
+}
+async function runCell(i) {
+  const btn = document.getElementById(`btn-${i}`);
+  const out = document.getElementById(`out-${i}`);
+  const hint = document.getElementById(`hint-${i}`);
+  btn.disabled = true;
+  try {
+    const py = await getPy(hint);
+    out.style.display = "block";
+    out.classList.remove("err");
+    out.textContent = "";
+    let buf = [];
+    py.setStdout({ batched: (s) => { buf.push(s); out.textContent = buf.join("\n"); } });
+    py.setStderr({ batched: (s) => { buf.push(s); out.textContent = buf.join("\n"); } });
+    const code = document.getElementById(`code-${i}`).value;
+    await py.runPythonAsync(code);
+    if (!buf.length) out.textContent = "(natija yo'q — print qo'shing)";
+  } catch (e) {
+    out.style.display = "block";
+    out.classList.add("err");
+    const msg = String(e.message || e);
+    const lines = msg.split("\n").filter(l => l.trim());
+    out.textContent = "XATO: " + (lines[lines.length - 1] || msg);
+  }
+  btn.disabled = false;
+}
+function resetCell(i) {
+  const t = document.getElementById(`code-${i}`);
+  t.value = CELLS[i].c;
+  t.dispatchEvent(new Event("input"));
+  document.getElementById(`out-${i}`).style.display = "none";
+}
+
+/* ===== grade ===== */
+function grade() {
+  let score = 0;
+  QUIZ.forEach((q, qi) => {
+    const sel = document.querySelector(`input[name="q${qi}"]:checked`);
+    for (let oi = 0; oi < 4; oi++)
+      document.getElementById(`opt-${qi}-${oi}`).classList.remove("correct", "wrong");
+    if (sel) {
+      const v = +sel.value;
+      if (v === q.a) { score++; document.getElementById(`opt-${qi}-${v}`).classList.add("correct"); }
+      else {
+        document.getElementById(`opt-${qi}-${v}`).classList.add("wrong");
+        document.getElementById(`opt-${qi}-${q.a}`).classList.add("correct");
+      }
+    } else {
+      document.getElementById(`opt-${qi}-${q.a}`).classList.add("correct");
+    }
+  });
+  const el = document.getElementById("score");
+  el.style.display = "block";
+  let emoji = score >= 9 ? "🏆" : score >= 7 ? "🎉" : score >= 5 ? "💪" : "📚";
+  let msg = score >= 9 ? "Ajoyib!" : score >= 7 ? "Yaxshi natija!" : score >= 5 ? "Yomon emas, yana takrorlang!" : "Darsni qayta ko'rib chiqing!";
+  el.style.background = score >= 7 ? "rgba(74,222,128,.1)" : score >= 5 ? "rgba(245,158,11,.12)" : "rgba(248,113,113,.1)";
+  el.style.color = score >= 7 ? "#4ade80" : score >= 5 ? "#fbbf24" : "#f87171";
+  el.textContent = `${emoji} ${score} / ${QUIZ.length} — ${msg}`;
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+/* ===== download hw ===== */
+function downloadHW() {
+  let txt = `${DATA.title.toUpperCase()}\nUY ISHI (15 ta topshiriq)\nSaddam Teacher | Data Analyst kursi | t.me/saddamtg\n` + "=".repeat(55) + "\n\n";
+  HW.forEach((h, i) => { txt += `${i + 1}. ${h}\n\n`; });
+  const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${DATA.lesson_no}-dars_uy_ishi.txt`;
+  a.click();
+}
+</script>
+</body>
+</html>
